@@ -97,11 +97,11 @@ export default function UploadPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-2">Upload CSV</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-2">นำเข้าข้อมูล CSV</h1>
       <p className="text-gray-700 mb-6 text-sm">
-        CSV format: <code className="bg-gray-100 text-gray-800 px-1 rounded">ship_number,owner_name</code>{' '}
-        (header required). Thai headers{' '}
-        <code className="bg-gray-100 text-gray-800 px-1 rounded">หมายเลขเรือ,ชื่อเจ้าของ</code> also accepted.
+        รูปแบบ CSV: <code className="bg-gray-100 text-gray-800 px-1 rounded">ship_number,owner_name</code>{' '}
+        (ต้องมีแถว header). รองรับ header ภาษาไทย{' '}
+        <code className="bg-gray-100 text-gray-800 px-1 rounded">หมายเลขเรือ,ชื่อเจ้าของ</code> ด้วย
       </p>
 
       {/* Drop Zone */}
@@ -114,11 +114,11 @@ export default function UploadPage() {
         <input {...getInputProps()} />
         <p className="text-4xl mb-3">📤</p>
         {isDragActive ? (
-          <p className="text-blue-600 font-medium">Drop the CSV file here…</p>
+          <p className="text-blue-600 font-medium">วางไฟล์ CSV ที่นี่…</p>
         ) : (
           <>
-            <p className="font-medium text-gray-800">Drag &amp; drop a CSV file, or click to browse</p>
-            <p className="text-sm text-gray-600 mt-1">Supports .csv files</p>
+            <p className="font-medium text-gray-800">ลากและวางไฟล์ CSV หรือคลิกเพื่อเลือกไฟล์</p>
+            <p className="text-sm text-gray-600 mt-1">รองรับไฟล์ .csv</p>
           </>
         )}
       </div>
@@ -126,7 +126,7 @@ export default function UploadPage() {
       {/* Parse errors */}
       {parseErrors.length > 0 && (
         <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4">
-          <p className="font-semibold text-red-700 mb-1">Parse errors</p>
+          <p className="font-semibold text-red-700 mb-1">พบข้อผิดพลาดในการอ่านไฟล์</p>
           {parseErrors.map((e, i) => (
             <p key={i} className="text-sm text-red-600">{e}</p>
           ))}
@@ -137,14 +137,14 @@ export default function UploadPage() {
       {preview && preview.length > 0 && (
         <div className="mt-6">
           <h2 className="font-semibold text-gray-800 mb-2">
-            Preview — {fileName} (showing first {preview.length} rows)
+            ตัวอย่างข้อมูล — {fileName} (แสดง {preview.length} แถวแรก)
           </h2>
           <div className="overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-sm">
               <thead className="bg-gray-100 text-gray-800">
                 <tr>
-                  <th className="px-4 py-2 text-left font-semibold">Ship Number</th>
-                  <th className="px-4 py-2 text-left font-semibold">Owner Name</th>
+                  <th className="px-4 py-2 text-left font-semibold">หมายเลขเรือ</th>
+                  <th className="px-4 py-2 text-left font-semibold">ชื่อเจ้าของ</th>
                 </tr>
               </thead>
               <tbody>
@@ -163,7 +163,7 @@ export default function UploadPage() {
             disabled={loading}
             className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition disabled:opacity-60"
           >
-            {loading ? 'Importing…' : 'Confirm Import'}
+            {loading ? 'กำลังนำเข้า…' : 'ยืนยันการนำเข้า'}
           </button>
         </div>
       )}
@@ -178,14 +178,14 @@ export default function UploadPage() {
       {/* Success result */}
       {result && (
         <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4">
-          <p className="font-semibold text-green-700">✅ Import complete</p>
+          <p className="font-semibold text-green-700">✅ นำเข้าข้อมูลสำเร็จ</p>
           <p className="text-sm text-green-600 mt-1">
-            {result.imported} rows imported successfully.
+            นำเข้าสำเร็จ {result.imported} รายการ
           </p>
           {result.skipped_errors.length > 0 && (
             <details className="mt-2">
               <summary className="text-sm text-yellow-700 cursor-pointer">
-                {result.skipped_errors.length} rows had errors
+                {result.skipped_errors.length} รายการมีข้อผิดพลาด
               </summary>
               <ul className="mt-1 text-xs text-yellow-700 list-disc list-inside">
                 {result.skipped_errors.map((e, i) => (

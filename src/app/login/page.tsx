@@ -37,11 +37,11 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
         <h1 className="text-2xl font-bold text-center text-blue-700 mb-2">⛽ Oil Register</h1>
-        <p className="text-center text-gray-600 text-sm mb-6">Admin Portal</p>
+        <p className="text-center text-gray-600 text-sm mb-6">ระบบสำหรับผู้ดูแลระบบ</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">ชื่อผู้ใช้</label>
             <input
               type="text"
               required
@@ -51,7 +51,7 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">รหัสผ่าน</label>
             <input
               type="password"
               required
@@ -72,7 +72,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition disabled:opacity-60"
           >
-            {loading ? 'Signing in…' : 'Sign In'}
+            {loading ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ'}
           </button>
         </form>
       </div>

@@ -26,19 +26,19 @@ export default function ShipsPage() {
   useEffect(() => { fetchShips() }, [fetchShips])
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this ship record?')) return
+    if (!confirm('ยืนยันการลบรายการเรือนี้?')) return
     await fetch(`/api/ships/${id}`, { method: 'DELETE' })
     fetchShips()
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Ships</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">ข้อมูลเรือ</h1>
 
       <div className="flex gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search ship number or owner…"
+          placeholder="ค้นหาหมายเลขเรือหรือชื่อเจ้าของ…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { setQuery(search); setPage(1) } }}
@@ -48,38 +48,38 @@ export default function ShipsPage() {
           onClick={() => { setQuery(search); setPage(1) }}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
         >
-          Search
+          ค้นหา
         </button>
         {query && (
           <button
             onClick={() => { setSearch(''); setQuery(''); setPage(1) }}
             className="text-sm text-gray-600 hover:text-gray-900 font-medium"
           >
-            Clear
+            ล้างการค้นหา
           </button>
         )}
       </div>
 
-      <p className="text-sm text-gray-600 mb-3">{total.toLocaleString()} ships found</p>
+      <p className="text-sm text-gray-600 mb-3">พบ {total.toLocaleString()} รายการ</p>
 
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-gray-800">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold">Ship Number</th>
-              <th className="px-4 py-3 text-left font-semibold">Owner Name</th>
-              <th className="px-4 py-3 text-left font-semibold">Added</th>
-              <th className="px-4 py-3 text-right font-semibold">Actions</th>
+              <th className="px-4 py-3 text-left font-semibold">หมายเลขเรือ</th>
+              <th className="px-4 py-3 text-left font-semibold">ชื่อเจ้าของ</th>
+              <th className="px-4 py-3 text-left font-semibold">วันที่เพิ่ม</th>
+              <th className="px-4 py-3 text-right font-semibold">จัดการ</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">Loading…</td>
+                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td>
               </tr>
             ) : ships.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">No ships found</td>
+                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">ไม่พบข้อมูลเรือ</td>
               </tr>
             ) : (
               ships.map((ship) => (
@@ -94,7 +94,7 @@ export default function ShipsPage() {
                       onClick={() => handleDelete(ship.id)}
                       className="text-red-500 hover:text-red-700 text-xs font-medium"
                     >
-                      Delete
+                      ลบ
                     </button>
                   </td>
                 </tr>
@@ -115,7 +115,7 @@ export default function ShipsPage() {
             ← Prev
           </button>
           <span className="px-3 py-1 text-sm text-gray-700">
-            Page {page} / {Math.ceil(total / limit)}
+            หน้า {page} / {Math.ceil(total / limit)}
           </span>
           <button
             onClick={() => setPage((p) => p + 1)}

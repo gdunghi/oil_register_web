@@ -9,10 +9,10 @@ export default function AdminNav({ username, role }: { username: string; role: R
   const router = useRouter()
 
   const links = [
-    { href: '/dashboard', label: 'Dashboard' },
-    { href: '/upload', label: 'Upload CSV' },
-    { href: '/ships', label: 'Ships' },
-    ...(role === 'admin' ? [{ href: '/users', label: 'Users' }] : []),
+    { href: '/dashboard', label: 'หน้าหลัก' },
+    { href: '/upload', label: 'นำเข้า CSV' },
+    { href: '/ships', label: 'ข้อมูลเรือ' },
+    ...(role === 'admin' ? [{ href: '/users', label: 'จัดการผู้ใช้' }] : []),
   ]
 
   async function handleLogout() {
@@ -42,7 +42,7 @@ export default function AdminNav({ username, role }: { username: string; role: R
             onClick={handleLogout}
             className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition"
           >
-            Logout
+          ออกจากระบบ
           </button>
         </div>
       </div>

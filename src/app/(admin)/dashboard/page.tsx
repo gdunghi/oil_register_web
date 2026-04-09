@@ -13,14 +13,14 @@ export default async function DashboardPage() {
   ])
 
   const stats = [
-    { label: 'Total Ships', value: shipCount ?? 0, color: 'bg-blue-100 text-blue-700' },
-    { label: 'Staff Users', value: userCount ?? 0, color: 'bg-green-100 text-green-700' },
+    { label: 'เรือทั้งหมด', value: shipCount ?? 0, color: 'bg-blue-100 text-blue-700' },
+    { label: 'เจ้าหน้าที่', value: userCount ?? 0, color: 'bg-green-100 text-green-700' },
   ]
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-2">Dashboard</h1>
-      <p className="text-gray-600 mb-8">Welcome back, {payload?.username}</p>
+      <h1 className="text-2xl font-bold text-gray-800 mb-2">หน้าหลัก</h1>
+      <p className="text-gray-600 mb-8">ยินดีต้อนรับ, {payload?.username}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         {stats.map((s) => (
@@ -33,9 +33,9 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { href: '/upload', label: 'Upload CSV', icon: '📤', desc: 'Import ship data from CSV' },
-          { href: '/ships', label: 'Manage Ships', icon: '🚢', desc: 'View and delete ship records' },
-          { href: '/users', label: 'Manage Users', icon: '👥', desc: 'Create and manage staff accounts' },
+          { href: '/upload', label: 'นำเข้า CSV', icon: '📤', desc: 'นำเข้าข้อมูลเรือจากไฟล์ CSV' },
+          { href: '/ships', label: 'ข้อมูลเรือ', icon: '🚢', desc: 'ดูและลบรายการข้อมูลเรือ' },
+          { href: '/users', label: 'จัดการผู้ใช้', icon: '👥', desc: 'สร้างและจัดการบัญชีเจ้าหน้าที่' },
         ].map((card) => (
           <a
             key={card.href}
