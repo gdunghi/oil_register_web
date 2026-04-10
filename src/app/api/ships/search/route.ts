@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
-// GET /api/ships/search?q=SHIP_NUMBER — accessible by staff and admin
-// Returns up to 20 ships whose ship_number starts with q (case-insensitive)
+// GET /api/ships/search?q=... — accessible by staff and admin
+// Returns up to 20 ships whose ship_number OR ship_name starts with q (case-insensitive)
 export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get('q')?.trim()
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabaseAdmin
     .from('ships')
     .select('id, ship_number, green_oil_code, ship_name, tank_capacity, usage_volume, status, created_at, updated_at')
-    .ilike('ship_number', `${q}%`)
+    .or(`ship_number.ilike.${q}%,ship_name.ilike.${q}%`)
     .order('ship_number', { ascending: true })
     .limit(20)
 
