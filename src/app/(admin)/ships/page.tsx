@@ -31,6 +31,11 @@ export default function ShipsPage() {
     fetchShips()
   }
 
+  function fmt(n: number | null) {
+    if (n == null) return '—'
+    return n.toLocaleString('th-TH')
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-800 mb-6">ข้อมูลเรือ</h1>
@@ -38,7 +43,7 @@ export default function ShipsPage() {
       <div className="flex gap-3 mb-4">
         <input
           type="text"
-          placeholder="ค้นหาหมายเลขเรือหรือชื่อเจ้าของ…"
+          placeholder="ค้นหาทะเบียนเรือหรือชื่อเรือ…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { setQuery(search); setPage(1) } }}
@@ -66,28 +71,40 @@ export default function ShipsPage() {
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-gray-800">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold">หมายเลขเรือ</th>
-              <th className="px-4 py-3 text-left font-semibold">ชื่อเจ้าของ</th>
-              <th className="px-4 py-3 text-left font-semibold">วันที่เพิ่ม</th>
+              <th className="px-4 py-3 text-left font-semibold">ทะเบียนเรือ</th>
+              <th className="px-4 py-3 text-left font-semibold">รหัสน้ำมันเขียว</th>
+              <th className="px-4 py-3 text-left font-semibold">ชื่อเรือ</th>
+              <th className="px-4 py-3 text-right font-semibold">ความจุถัง</th>
+              <th className="px-4 py-3 text-right font-semibold">ปริมาณใช้งาน</th>
+              <th className="px-4 py-3 text-center font-semibold">สถานะ</th>
               <th className="px-4 py-3 text-right font-semibold">จัดการ</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td>
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td>
               </tr>
             ) : ships.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">ไม่พบข้อมูลเรือ</td>
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">ไม่พบข้อมูลเรือ</td>
               </tr>
             ) : (
               ships.map((ship) => (
                 <tr key={ship.id} className="border-t border-gray-200 hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono font-semibold text-gray-900">{ship.ship_number}</td>
-                  <td className="px-4 py-3 text-gray-900">{ship.owner_name}</td>
-                  <td className="px-4 py-3 text-gray-700">
-                    {new Date(ship.created_at).toLocaleDateString('th-TH')}
+                  <td className="px-4 py-3 text-gray-700">{ship.green_oil_code || '—'}</td>
+                  <td className="px-4 py-3 text-gray-900">{ship.ship_name}</td>
+                  <td className="px-4 py-3 text-right text-gray-700">{fmt(ship.tank_capacity)}</td>
+                  <td className="px-4 py-3 text-right text-gray-700">{fmt(ship.usage_volume)}</td>
+                  <td className="px-4 py-3 text-center">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                      ship.status === 'ลงได้'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                      {ship.status}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
@@ -112,7 +129,7 @@ export default function ShipsPage() {
             disabled={page === 1}
             className="px-3 py-1 text-sm rounded border border-gray-400 text-gray-700 disabled:opacity-40"
           >
-            ← Prev
+            ← ก่อนหน้า
           </button>
           <span className="px-3 py-1 text-sm text-gray-700">
             หน้า {page} / {Math.ceil(total / limit)}
@@ -122,7 +139,7 @@ export default function ShipsPage() {
             disabled={page * limit >= total}
             className="px-3 py-1 text-sm rounded border border-gray-400 text-gray-700 disabled:opacity-40"
           >
-            Next →
+            ถัดไป →
           </button>
         </div>
       )}

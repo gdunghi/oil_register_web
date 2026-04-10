@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { parseCsvText } from '@/lib/csv-parser'
+import { parseCsvText, parseExcelBuffer } from '@/lib/csv-parser'
 
 // GET /api/ships — list all ships (admin only, handled by middleware)
 export async function GET(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     .range(from, to)
 
   if (filter) {
-    query = query.or(`ship_number.ilike.%${filter}%,owner_name.ilike.%${filter}%`)
+    query = query.or(`ship_number.ilike.${filter}%,ship_name.ilike.${filter}%`)
   }
 
   const { data, count, error } = await query
@@ -28,25 +28,39 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ data, total: count, page, limit })
 }
 
-// POST /api/ships — bulk import from CSV text body
+// POST /api/ships — bulk import from CSV or Excel
 export async function POST(request: NextRequest) {
   const contentType = request.headers.get('content-type') ?? ''
-  let csvText: string
+  let rows
+  let errors: string[] = []
 
-  if (contentType.includes('application/json')) {
+  if (
+    contentType.includes('application/vnd.openxmlformats') ||
+    contentType.includes('application/vnd.ms-excel') ||
+    contentType.includes('application/octet-stream')
+  ) {
+    // Excel binary
+    const buffer = await request.arrayBuffer()
+    const result = await parseExcelBuffer(buffer)
+    rows = result.rows
+    errors = result.errors
+  } else if (contentType.includes('application/json')) {
     const body = await request.json()
-    csvText = body.csv as string
+    const result = parseCsvText(body.csv as string)
+    rows = result.rows
+    errors = result.errors
   } else {
-    csvText = await request.text()
+    // CSV text
+    const csvText = await request.text()
+    const result = parseCsvText(csvText)
+    rows = result.rows
+    errors = result.errors
   }
-
-  const { rows, errors } = parseCsvText(csvText)
 
   if (!rows.length) {
-    return NextResponse.json({ error: 'No valid rows found', details: errors }, { status: 400 })
+    return NextResponse.json({ error: 'ไม่พบข้อมูลที่ถูกต้อง', details: errors }, { status: 400 })
   }
 
-  // Upsert by ship_number
   const { data, error } = await supabaseAdmin
     .from('ships')
     .upsert(

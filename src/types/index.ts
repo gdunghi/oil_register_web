@@ -11,8 +11,12 @@ export interface StaffUser {
 
 export interface Ship {
   id: string
-  ship_number: string
-  owner_name: string
+  ship_number: string       // ทะเบียนเรือ
+  green_oil_code: string | null  // รหัสน้ำมันเขียว
+  ship_name: string         // ชื่อเรือจากสรรพสามิต
+  tank_capacity: number | null   // ความจุถัง
+  usage_volume: number | null    // ปริมาณการใช้งาน
+  status: string            // สถานะ
   created_at: string
   updated_at: string
 }
