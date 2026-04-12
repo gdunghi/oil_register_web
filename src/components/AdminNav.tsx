@@ -25,7 +25,7 @@ export default function AdminNav({ username, role }: { username: string; role: R
     <nav className="bg-blue-700 text-white shadow">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
         <div className="flex items-center gap-6">
-          <span className="font-bold text-lg">⛽ Oil Register</span>
+          <span className="font-bold text-lg">⛽ Oil Member</span>
           {links.map((l) => (
             <Link
               key={l.href}
