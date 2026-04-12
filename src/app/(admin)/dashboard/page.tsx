@@ -33,8 +33,8 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { href: '/upload', label: 'นำเข้า CSV', icon: '📤', desc: 'นำเข้าข้อมูลเรือจากไฟล์ CSV' },
-          { href: '/ships', label: 'ข้อมูลเรือ', icon: '🚢', desc: 'ดูและลบรายการข้อมูลเรือ' },
+          { href: '/upload', label: 'อับโหลดข้อมูลเรือ', icon: '📤', desc: 'อับโหลดข้อมูลเรือไฟล์ CSV,EXCEL' },
+          { href: '/ships', label: 'จัดการข้อมูลเรือ', icon: '🚢', desc: 'ดูและลบรายการข้อมูลเรือ' },
           { href: '/users', label: 'จัดการผู้ใช้', icon: '👥', desc: 'สร้างและจัดการบัญชีเจ้าหน้าที่' },
         ].map((card) => (
           <a

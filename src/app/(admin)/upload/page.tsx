@@ -146,19 +146,19 @@ export default function UploadPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <h1 className="text-2xl font-bold text-gray-800">นำเข้าข้อมูล CSV / Excel</h1>
+        <h1 className="text-2xl font-bold text-gray-800">นำเข้าข้อมูล</h1>
         <div className="flex gap-2">
           <button
             onClick={() => downloadTemplate('excel')}
             className="flex items-center gap-1 text-sm border border-green-500 text-green-700 hover:bg-green-50 px-3 py-2 rounded-lg transition"
           >
-            ⬇ แม่แบบ Excel
+            ⬇ ตัวอย่าง Excel
           </button>
           <button
             onClick={() => downloadTemplate('csv')}
             className="flex items-center gap-1 text-sm border border-gray-400 text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg transition"
           >
-            ⬇ แม่แบบ CSV
+            ⬇ ตัวอย่าง CSV
           </button>
         </div>
       </div>

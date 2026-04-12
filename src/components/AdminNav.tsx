@@ -10,7 +10,7 @@ export default function AdminNav({ username, role }: { username: string; role: R
 
   const links = [
     { href: '/dashboard', label: 'หน้าหลัก' },
-    { href: '/upload', label: 'นำเข้า CSV' },
+    { href: '/upload', label: 'นำเข้าข้อมูล' },
     { href: '/ships', label: 'ข้อมูลเรือ' },
     ...(role === 'admin' ? [{ href: '/users', label: 'จัดการผู้ใช้' }] : []),
   ]
