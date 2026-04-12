@@ -36,7 +36,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center text-blue-700 mb-2">⛽ Oil Register</h1>
+        <h1 className="text-2xl font-bold text-center text-blue-700 mb-2">⛽ Oil Member</h1>
         <p className="text-center text-gray-600 text-sm mb-6">ระบบสำหรับผู้ดูแลระบบ</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
