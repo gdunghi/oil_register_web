@@ -10,7 +10,7 @@ export default function ShipsPage() {
   const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
-  const limit = 50
+  const limit = 10
 
   const fetchShips = useCallback(async () => {
     setLoading(true)
