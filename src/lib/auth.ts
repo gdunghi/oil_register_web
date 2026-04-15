@@ -6,7 +6,7 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
 
 export async function signJWT(
   payload: Omit<JWTPayload, 'iat' | 'exp'>,
-  expiresIn = '2min',
+  expiresIn = '8h',
 ): Promise<string> {
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
