@@ -28,7 +28,8 @@ export async function proxy(request: NextRequest) {
     payload.role !== 'admin' &&
     ADMIN_ONLY_API.some((p) => pathname.startsWith(p)) &&
     !pathname.startsWith('/api/ships/search') &&
-    !pathname.startsWith('/api/ships/sync')
+    !pathname.startsWith('/api/ships/sync') &&
+    !pathname.startsWith('/api/ships/data-version')
   ) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
