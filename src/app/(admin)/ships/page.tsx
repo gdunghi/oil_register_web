@@ -73,7 +73,8 @@ export default function ShipsPage() {
             <tr>
               <th className="px-4 py-3 text-left font-semibold">ทะเบียนเรือ</th>
               <th className="px-4 py-3 text-left font-semibold">รหัสน้ำมันเขียว</th>
-              <th className="px-4 py-3 text-left font-semibold">ชื่อเรือ</th>
+              <th className="px-4 py-3 text-left font-semibold">ชื่อเรือ (สรรพสามิต)</th>
+              <th className="px-4 py-3 text-left font-semibold">ชื่อเรือ (สมาคม)</th>
               <th className="px-4 py-3 text-right font-semibold">ความจุถัง</th>
               <th className="px-4 py-3 text-right font-semibold">ปริมาณใช้งาน</th>
               <th className="px-4 py-3 text-center font-semibold">สถานะ</th>
@@ -83,11 +84,11 @@ export default function ShipsPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td>
+                <td colSpan={8} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td>
               </tr>
             ) : ships.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">ไม่พบข้อมูลเรือ</td>
+                <td colSpan={8} className="px-4 py-8 text-center text-gray-500">ไม่พบข้อมูลเรือ</td>
               </tr>
             ) : (
               ships.map((ship) => (
@@ -95,6 +96,7 @@ export default function ShipsPage() {
                   <td className="px-4 py-3 font-mono font-semibold text-gray-900">{ship.ship_number}</td>
                   <td className="px-4 py-3 text-gray-700">{ship.green_oil_code || '—'}</td>
                   <td className="px-4 py-3 text-gray-900">{ship.ship_name}</td>
+                  <td className="px-4 py-3 text-gray-900">{ship.ship_name_association}</td>
                   <td className="px-4 py-3 text-right text-gray-700">{fmt(ship.tank_capacity)}</td>
                   <td className="px-4 py-3 text-right text-gray-700">{fmt(ship.usage_volume)}</td>
                   <td className="px-4 py-3 text-center">

@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     .range(from, to)
 
   if (filter) {
-    query = query.or(`ship_number.ilike.${filter}%,ship_name.ilike.${filter}%`)
+    query = query.or(`ship_number.ilike.%${filter}%,ship_name.ilike.%${filter}%,ship_name_association.ilike.%${filter}%`)
   }
 
   const { data, count, error } = await query

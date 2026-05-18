@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const { data, count, error } = await supabaseAdmin
     .from('ships')
     .select(
-      'id, ship_number, green_oil_code, ship_name, tank_capacity, usage_volume, status, created_at, updated_at',
+      'id, ship_number, green_oil_code, ship_name, ship_name_association, tank_capacity, usage_volume, status, created_at, updated_at',
       { count: 'exact' }
     )
     .order('ship_number', { ascending: true })
