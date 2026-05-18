@@ -7,6 +7,7 @@ interface PreviewRow {
   ship_number: string
   green_oil_code: string
   ship_name: string
+  ship_name_association: string
   tank_capacity: string
   usage_volume: string
   status: string
@@ -49,6 +50,7 @@ export default function UploadPage() {
           ship_number: r.ship_number,
           green_oil_code: r.green_oil_code,
           ship_name: r.ship_name,
+          ship_name_association: r.ship_name_association,
           tank_capacity: r.tank_capacity?.toLocaleString('th-TH') ?? '',
           usage_volume: r.usage_volume?.toLocaleString('th-TH') ?? '',
           status: r.status,
@@ -67,6 +69,7 @@ export default function UploadPage() {
           ship_number: r.ship_number,
           green_oil_code: r.green_oil_code,
           ship_name: r.ship_name,
+          ship_name_association: r.ship_name_association,
           tank_capacity: r.tank_capacity?.toLocaleString('th-TH') ?? '',
           usage_volume: r.usage_volume?.toLocaleString('th-TH') ?? '',
           status: r.status,
@@ -123,8 +126,8 @@ export default function UploadPage() {
 
   async function downloadTemplate(type: 'csv' | 'excel') {
     if (type === 'csv') {
-      const header = 'ทะเบียนเรือ,รหัสน้ำมันเขียว,ชื่อเรือจากสรรพสามิต,ความจุถัง,ปริมาณการใช้งาน,สถานะ\n'
-      const sample = '288103842,กบ-01-0005,ศ.ศักดิ์สังวาลย์เพชร 3,4500,12000,ลงได้\n'
+      const header = 'ทะเบียนเรือ,รหัสน้ำมันเขียว,ชื่อเรือจากสรรพสามิต,ชื่อเรือจากสมาคม,ความจุถัง,ปริมาณการใช้งาน,สถานะ\n'
+      const sample = '288103842,กบ-01-0005,ศ.ศักดิ์สังวาลย์เพชร 3,ศักดิ์สังวาลย์เพชร 3,4500,12000,ลงได้\n'
       const blob = new Blob(['\uFEFF' + header + sample], { type: 'text/csv;charset=utf-8;' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -134,9 +137,9 @@ export default function UploadPage() {
       const { utils, writeFile } = await import('xlsx')
       const wb = utils.book_new()
       const ws = utils.aoa_to_sheet([
-        ['ทะเบียนเรือ', 'รหัสน้ำมันเขียว', 'ชื่อเรือจากสรรพสามิต', 'ความจุถัง', 'ปริมาณการใช้งาน', 'สถานะ'],
-        ['288103842', 'กบ-01-0005', 'ศ.ศักดิ์สังวาลย์เพชร 3', 4500, 12000, 'ลงได้'],
-        ['585202640', 'กบ-01-0006', 'ศ.ศักดิ์สังวาลย์เพชร 7', 2500, 4000, 'ลงได้'],
+        ['ทะเบียนเรือ', 'รหัสน้ำมันเขียว', 'ชื่อเรือจากสรรพสามิต', 'ชื่อเรือจากสมาคม', 'ความจุถัง', 'ปริมาณการใช้งาน', 'สถานะ'],
+        ['288103842', 'กบ-01-0005', 'ศ.ศักดิ์สังวาลย์เพชร 3', 'ศักดิ์สังวาลย์เพชร 3', 4500, 12000, 'ลงได้'],
+        ['585202640', 'กบ-01-0006', 'ศ.ศักดิ์สังวาลย์เพชร 7', 'ศักดิ์สังวาลย์เพชร 7', 2500, 4000, 'ลงได้'],
       ])
       utils.book_append_sheet(wb, ws, 'เรือ')
       writeFile(wb, 'ship_template.xlsx')
@@ -165,7 +168,7 @@ export default function UploadPage() {
       <p className="text-gray-700 mb-6 text-sm">
         รองรับไฟล์ <strong>.xlsx</strong> และ <strong>.csv</strong> — คอลัมน์:{' '}
         <code className="bg-gray-100 text-gray-800 px-1 rounded text-xs">
-          ทะเบียนเรือ, รหัสน้ำมันเขียว, ชื่อเรือจากสรรพสามิต, ความจุถัง, ปริมาณการใช้งาน, สถานะ
+          ทะเบียนเรือ, รหัสน้ำมันเขียว, ชื่อเรือจากสรรพสามิต, ชื่อเรือจากสมาคม, ความจุถัง, ปริมาณการใช้งาน, สถานะ
         </code>
       </p>
 
@@ -210,7 +213,8 @@ export default function UploadPage() {
                 <tr>
                   <th className="px-3 py-2 text-left font-semibold">ทะเบียนเรือ</th>
                   <th className="px-3 py-2 text-left font-semibold">รหัสน้ำมันเขียว</th>
-                  <th className="px-3 py-2 text-left font-semibold">ชื่อเรือ</th>
+                  <th className="px-3 py-2 text-left font-semibold">ชื่อเรือ (สรรพสามิต)</th>
+                  <th className="px-3 py-2 text-left font-semibold">ชื่อเรือ (สมาคม)</th>
                   <th className="px-3 py-2 text-right font-semibold">ความจุถัง</th>
                   <th className="px-3 py-2 text-right font-semibold">ปริมาณใช้งาน</th>
                   <th className="px-3 py-2 text-center font-semibold">สถานะ</th>
@@ -222,6 +226,7 @@ export default function UploadPage() {
                     <td className="px-3 py-2 font-mono font-semibold text-gray-900">{row.ship_number}</td>
                     <td className="px-3 py-2 text-gray-700">{row.green_oil_code || '—'}</td>
                     <td className="px-3 py-2 text-gray-900">{row.ship_name}</td>
+                    <td className="px-3 py-2 text-gray-900">{row.ship_name_association}</td>
                     <td className="px-3 py-2 text-right text-gray-700">{row.tank_capacity || '—'}</td>
                     <td className="px-3 py-2 text-right text-gray-700">{row.usage_volume || '—'}</td>
                     <td className="px-3 py-2 text-center">

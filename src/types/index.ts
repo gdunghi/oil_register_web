@@ -14,6 +14,7 @@ export interface Ship {
   ship_number: string       // ทะเบียนเรือ
   green_oil_code: string | null  // รหัสน้ำมันเขียว
   ship_name: string         // ชื่อเรือจากสรรพสามิต
+  ship_name_association: string  // ชื่อเรือจากสมาคม
   tank_capacity: number | null   // ความจุถัง
   usage_volume: number | null    // ปริมาณการใช้งาน
   status: string            // สถานะ

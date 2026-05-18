@@ -61,12 +61,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'ไม่พบข้อมูลที่ถูกต้อง', details: errors }, { status: 400 })
   }
 
+  const { error: deleteError } = await supabaseAdmin
+    .from('ships')
+    .delete()
+    .neq('id', '00000000-0000-0000-0000-000000000000')
+
+  if (deleteError) return NextResponse.json({ error: deleteError.message }, { status: 500 })
+
   const { data, error } = await supabaseAdmin
     .from('ships')
-    .upsert(
-      rows.map((r) => ({ ...r, updated_at: new Date().toISOString() })),
-      { onConflict: 'ship_number' }
-    )
+    .insert(rows.map((r) => ({ ...r, updated_at: new Date().toISOString() })))
     .select('id')
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

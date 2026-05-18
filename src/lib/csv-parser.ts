@@ -1,12 +1,13 @@
 import Papa from 'papaparse'
 
 export interface ShipRow {
-  ship_number: string       // ทะเบียนเรือ
-  green_oil_code: string    // รหัสน้ำมันเขียว
-  ship_name: string         // ชื่อเรือจากสรรพสามิต
+  ship_number: string            // ทะเบียนเรือ
+  green_oil_code: string         // รหัสน้ำมันเขียว
+  ship_name: string              // ชื่อเรือจากสรรพสามิต
+  ship_name_association: string  // ชื่อเรือจากสมาคม
   tank_capacity: number | null   // ความจุถัง
   usage_volume: number | null    // ปริมาณการใช้งาน
-  status: string            // สถานะ
+  status: string                 // สถานะ
 }
 
 export interface ParseResult {
@@ -32,8 +33,9 @@ function normaliseRow(raw: Record<string, string | number | null | undefined>, i
     return ''
   }
 
-  const ship_number = get('ship_number', 'ทะเบียนเรือ')
-  const ship_name   = get('ship_name', 'ชื่อเรือจากสรรพสามิต', 'ชื่อเรือ')
+  const ship_number          = get('ship_number', 'ทะเบียนเรือ')
+  const ship_name            = get('ship_name', 'ชื่อเรือจากสรรพสามิต', 'ชื่อเรือ')
+  const ship_name_association = get('ship_name_association', 'ชื่อเรือจากสมาคม')
 
   if (!ship_number) {
     errors.push(`แถว ${index + 2}: ไม่พบทะเบียนเรือ`)
@@ -41,6 +43,10 @@ function normaliseRow(raw: Record<string, string | number | null | undefined>, i
   }
   if (!ship_name) {
     errors.push(`แถว ${index + 2}: ไม่พบชื่อเรือ`)
+    return null
+  }
+  if (!ship_name_association) {
+    errors.push(`แถว ${index + 2}: ไม่พบชื่อเรือจากสมาคม`)
     return null
   }
 
@@ -54,6 +60,7 @@ function normaliseRow(raw: Record<string, string | number | null | undefined>, i
     ship_number,
     green_oil_code: get('green_oil_code', 'รหัสน้ำมันเขียว'),
     ship_name,
+    ship_name_association,
     tank_capacity: parseNum(['tank_capacity', 'ความจุถัง']),
     usage_volume:  parseNum(['usage_volume', 'ปริมาณการใช้งาน']),
     status: get('status', 'สถานะ') || 'ลงได้',
