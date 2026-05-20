@@ -177,7 +177,7 @@ export default function UsersPage() {
                   onChange={(e) => setForm({ ...form, role: e.target.value as 'admin' | 'staff' })}
                   className="w-full border border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="staff">เจ้าหน้าที่</option>
+                  {/*<option value="staff">เจ้าหน้าที่</option>*/}
                   <option value="admin">ผู้ดูแล</option>
                 </select>
               </div>
