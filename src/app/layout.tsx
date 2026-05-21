@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Oil Member",
-  description: "Oil Member",
+  title: "Green Oil Boat",
+  description: "Green Oil Boat",
 };
 
 export default function RootLayout({
