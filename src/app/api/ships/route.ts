@@ -75,6 +75,13 @@ export async function POST(request: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
+  const username = request.headers.get('x-username') ?? 'unknown'
+  await supabaseAdmin.from('ship_import_log').insert({
+    imported_by: username,
+    record_count: data?.length ?? rows.length,
+    skipped_count: errors.length,
+  })
+
   return NextResponse.json({
     data: { imported: data?.length ?? rows.length, skipped_errors: errors },
   })

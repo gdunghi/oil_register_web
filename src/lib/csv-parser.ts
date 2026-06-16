@@ -1,13 +1,13 @@
 import Papa from 'papaparse'
 
 export interface ShipRow {
-  ship_number: string            // ทะเบียนเรือ
-  green_oil_code: string         // รหัสน้ำมันเขียว
-  ship_name: string              // ชื่อเรือจากสรรพสามิต
-  ship_name_association: string  // ชื่อเรือจากสมาคม
-  tank_capacity: number | null   // ความจุถัง
-  usage_volume: number | null    // ปริมาณการใช้งาน
-  status: string                 // สถานะ
+  ship_number: string            // col 0
+  green_oil_code: string         // col 1
+  ship_name: string              // col 2
+  ship_name_association: string  // col 3
+  tank_capacity: number | null   // col 4
+  usage_volume: number | null    // col 5
+  status: string                 // col 6
 }
 
 export interface ParseResult {
@@ -15,27 +15,24 @@ export interface ParseResult {
   errors: string[]
 }
 
-/** Normalise a raw record (from CSV or Excel) into a ShipRow */
-function normaliseRow(raw: Record<string, string | number | null | undefined>, index: number, errors: string[]): ShipRow | null {
-  // Normalize all keys: trim whitespace so " ความจุถัง " matches "ความจุถัง"
-  const r: Record<string, string | number | null | undefined> = {}
-  for (const [k, v] of Object.entries(raw)) {
-    r[k.trim()] = v
+type RawRow = (string | number | null | undefined)[]
+
+function normaliseRow(raw: RawRow, index: number, errors: string[]): ShipRow | null {
+  const str = (i: number) => {
+    const v = raw[i]
+    if (v === undefined || v === null) return ''
+    return String(v).trim()
   }
 
-  const get = (...keys: string[]) => {
-    for (const k of keys) {
-      const val = r[k]
-      if (val !== undefined && val !== null && String(val).trim() !== '') {
-        return String(val).trim()
-      }
-    }
-    return ''
+  const parseNum = (i: number) => {
+    const s = str(i).replace(/,/g, '')
+    const n = parseFloat(s)
+    return isNaN(n) ? null : n
   }
 
-  const ship_number          = get('ship_number', 'ทะเบียนเรือ')
-  const ship_name            = get('ship_name', 'ชื่อเรือจากสรรพสามิต', 'ชื่อเรือ')
-  const ship_name_association = get('ship_name_association', 'ชื่อเรือจากสมาคม')
+  const ship_number = str(0)
+  const ship_name = str(2)
+  const ship_name_association = str(3)
 
   if (!ship_number) {
     errors.push(`แถว ${index + 2}: ไม่พบทะเบียนเรือ`)
@@ -45,52 +42,41 @@ function normaliseRow(raw: Record<string, string | number | null | undefined>, i
     errors.push(`แถว ${index + 2}: ไม่พบชื่อเรือ`)
     return null
   }
-  if (!ship_name_association) {
-    errors.push(`แถว ${index + 2}: ไม่พบชื่อเรือจากสมาคม`)
-    return null
-  }
-
-  const parseNum = (keys: string[]) => {
-    const s = get(...keys).replace(/,/g, '')
-    const n = parseFloat(s)
-    return isNaN(n) ? null : n
-  }
-
   return {
     ship_number,
-    green_oil_code: get('green_oil_code', 'รหัสน้ำมันเขียว'),
+    green_oil_code: str(1),
     ship_name,
     ship_name_association,
-    tank_capacity: parseNum(['tank_capacity', 'ความจุถัง']),
-    usage_volume:  parseNum(['usage_volume', 'ปริมาณการใช้งาน']),
-    status: get('status', 'สถานะ') || 'ลงได้',
+    tank_capacity: parseNum(4),
+    usage_volume: parseNum(5),
+    status: str(6) || 'ลงได้',
   }
 }
 
-/** Parse CSV text */
+/** Parse CSV text — first row is header and is skipped */
 export function parseCsvText(csvText: string): ParseResult {
   const errors: string[] = []
   const rows: ShipRow[] = []
 
-  const result = Papa.parse<Record<string, string>>(csvText, {
-    header: true,
+  const result = Papa.parse<RawRow>(csvText, {
+    header: false,
     skipEmptyLines: true,
-    transformHeader: (h) => h.trim(),
   })
 
   if (result.errors.length) {
     errors.push(...result.errors.map((e) => `แถว ${e.row}: ${e.message}`))
   }
 
-  for (let i = 0; i < result.data.length; i++) {
-    const row = normaliseRow(result.data[i] as Record<string, string>, i, errors)
+  // skip row 0 (header)
+  for (let i = 1; i < result.data.length; i++) {
+    const row = normaliseRow(result.data[i], i - 1, errors)
     if (row) rows.push(row)
   }
 
   return { rows, errors }
 }
 
-/** Parse Excel ArrayBuffer (xlsx) */
+/** Parse Excel ArrayBuffer — first row is header and is skipped */
 export async function parseExcelBuffer(buffer: ArrayBuffer): Promise<ParseResult> {
   const { read, utils } = await import('xlsx')
   const errors: string[] = []
@@ -98,10 +84,11 @@ export async function parseExcelBuffer(buffer: ArrayBuffer): Promise<ParseResult
 
   const wb = read(buffer, { type: 'array' })
   const ws = wb.Sheets[wb.SheetNames[0]]
-  const raw = utils.sheet_to_json<Record<string, string | number>>(ws, { defval: '' })
+  const raw = utils.sheet_to_json<RawRow>(ws, { header: 1, defval: '' })
 
-  for (let i = 0; i < raw.length; i++) {
-    const row = normaliseRow(raw[i] as Record<string, string | number | null | undefined>, i, errors)
+  // skip row 0 (header)
+  for (let i = 1; i < raw.length; i++) {
+    const row = normaliseRow(raw[i], i - 1, errors)
     if (row) rows.push(row)
   }
 
