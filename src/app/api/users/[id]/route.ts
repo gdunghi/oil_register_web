@@ -33,7 +33,7 @@ export async function PUT(
     .select('id, username, role, is_active, created_at')
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
   return NextResponse.json({ data })
 }
 
@@ -48,6 +48,6 @@ export async function DELETE(
     .update({ is_active: false })
     .eq('id', id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
   return NextResponse.json({ data: { success: true } })
 }

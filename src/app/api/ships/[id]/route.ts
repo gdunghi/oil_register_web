@@ -15,7 +15,7 @@ export async function DELETE(
     .single()
 
   const { error } = await supabaseAdmin.from('ships').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
 
   if (ship) {
     await supabaseAdmin.from('ship_delete_log').insert({

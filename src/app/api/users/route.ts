@@ -9,7 +9,7 @@ export async function GET() {
     .select('id, username, role, is_active, created_at, created_by')
     .order('created_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
   return NextResponse.json({ data })
 }
 
@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
     if (error.code === '23505') {
       return NextResponse.json({ error: 'Username already exists' }, { status: 409 })
     }
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error(error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   return NextResponse.json({ data }, { status: 201 })

@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   }
 
   const { data, count, error } = await query
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
 
   return NextResponse.json({ data, total: count, page, limit })
 }
@@ -66,14 +66,14 @@ export async function POST(request: NextRequest) {
     .delete()
     .neq('id', '00000000-0000-0000-0000-000000000000')
 
-  if (deleteError) return NextResponse.json({ error: deleteError.message }, { status: 500 })
+  if (deleteError) { console.error(deleteError); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
 
   const { data, error } = await supabaseAdmin
     .from('ships')
     .insert(rows.map((r) => ({ ...r, updated_at: new Date().toISOString() })))
     .select('id')
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
 
   const username = request.headers.get('x-username') ?? 'unknown'
   await supabaseAdmin.from('ship_import_log').insert({
