@@ -241,7 +241,6 @@ export default function ShipsPage() {
                 <th className="px-4 py-3 text-left font-semibold">วันที่ / เวลา</th>
                 <th className="px-4 py-3 text-left font-semibold">ผู้ Upload</th>
                 <th className="px-4 py-3 text-right font-semibold">จำนวน Record</th>
-                <th className="px-4 py-3 text-right font-semibold">ข้ามแถว (error)</th>
               </tr>
             </thead>
             <tbody>
@@ -256,13 +255,6 @@ export default function ShipsPage() {
                     <td className="px-4 py-3 font-medium text-gray-900">{log.imported_by}</td>
                     <td className="px-4 py-3 text-right text-gray-900 font-semibold">
                       {log.record_count.toLocaleString('th-TH')}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      {log.skipped_count > 0 ? (
-                        <span className="text-orange-600 font-medium">{log.skipped_count}</span>
-                      ) : (
-                        <span className="text-gray-400">—</span>
-                      )}
                     </td>
                   </tr>
                 ))
