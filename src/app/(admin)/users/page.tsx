@@ -6,7 +6,7 @@ import type { StaffUser } from '@/types'
 interface UserFormData {
   username: string
   password: string
-  role: 'admin' | 'staff'
+  role: 'admin'
 }
 
 const EMPTY_FORM: UserFormData = { username: '', password: '', role: 'staff' }
@@ -23,8 +23,9 @@ export default function UsersPage() {
   async function fetchUsers() {
     setLoading(true)
     const res = await fetch('/api/users')
-    const json = await res.json()
-    setUsers(json.data ?? [])
+    const json = await res.json().then((d) => d.data.filter((u: StaffUser) => u.role === 'admin'))
+    console.log(json)
+    setUsers(json)
     setLoading(false)
   }
 
@@ -50,7 +51,7 @@ export default function UsersPage() {
     if (!editId && !form.password) { setFormError('กรุณากรอกรหัสผ่าน'); return }
 
     setSubmitting(true)
-    const body: Record<string, unknown> = { username: form.username, role: form.role }
+    const body: Record<string, unknown> = { username: form.username, role: 'admin' }
     if (form.password) body.password = form.password
 
     const res = await fetch(editId ? `/api/users/${editId}` : '/api/users', {
@@ -174,7 +175,7 @@ export default function UsersPage() {
                 <label className="block text-sm font-medium text-gray-800 mb-1">บทบาท</label>
                 <select
                   value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value as 'admin' | 'staff' })}
+                  onChange={(e) => setForm({ ...form, role: e.target.value as 'admin' })}
                   className="w-full border border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {/*<option value="staff">เจ้าหน้าที่</option>*/}
