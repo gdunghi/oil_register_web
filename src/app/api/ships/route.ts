@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
   if (dataDate) {
     await supabaseAdmin
       .from('ships_data_version')
-      .update({ last_modified_at: new Date(dataDate).toISOString() })
+      .update({ last_modified_at: new Date(dataDate + 'T00:00:00+07:00').toISOString() })
       .eq('id', 1)
   }
 
