@@ -76,10 +76,23 @@ export async function POST(request: NextRequest) {
   if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
 
   const username = request.headers.get('x-username') ?? 'unknown'
+  const dataDate = request.headers.get('x-data-date') ?? null
+  const fileNameRaw = request.headers.get('x-file-name')
+  const fileName = fileNameRaw ? decodeURIComponent(fileNameRaw) : null
+
+  if (dataDate) {
+    await supabaseAdmin
+      .from('ships_data_version')
+      .update({ last_modified_at: new Date(dataDate).toISOString() })
+      .eq('id', 1)
+  }
+
   await supabaseAdmin.from('ship_import_log').insert({
     imported_by: username,
     record_count: data?.length ?? rows.length,
     skipped_count: errors.length,
+    data_date: dataDate,
+    file_name: fileName,
   })
 
   return NextResponse.json({

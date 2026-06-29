@@ -23,6 +23,7 @@ export default function UploadPage() {
   const [fileData, setFileData] = useState<{ content: string | ArrayBuffer; isExcel: boolean } | null>(null)
   const [fileName, setFileName] = useState('')
   const [parseErrors, setParseErrors] = useState<string[]>([])
+  const [dataDate, setDataDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ImportResult | null>(null)
   const [apiError, setApiError] = useState('')
@@ -96,17 +97,21 @@ export default function UploadPage() {
     setApiError('')
     setResult(null)
 
+    const extraHeaders: Record<string, string> = {
+      'X-Data-Date': dataDate,
+      'X-File-Name': encodeURIComponent(fileName),
+    }
     let res: Response
     if (fileData.isExcel) {
       res = await fetch('/api/ships', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+        headers: { 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', ...extraHeaders },
         body: fileData.content as ArrayBuffer,
       })
     } else {
       res = await fetch('/api/ships', {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'text/plain', ...extraHeaders },
         body: fileData.content as string,
       })
     }
@@ -171,6 +176,17 @@ export default function UploadPage() {
           ทะเบียนเรือ, รหัสน้ำมันเขียว, ชื่อเรือจากสรรพสามิต, ชื่อเรือจากสมาคม, ความจุถัง, ปริมาณการใช้งาน, สถานะ
         </code>
       </p>
+
+      {/* Data date picker */}
+      <div className="mb-5 flex items-center gap-3">
+        <label className="text-sm font-medium text-gray-700 whitespace-nowrap">ข้อมูล ณ วันที่</label>
+        <input
+          type="date"
+          value={dataDate}
+          onChange={(e) => setDataDate(e.target.value)}
+          className="border border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
       {/* Drop Zone */}
       <div

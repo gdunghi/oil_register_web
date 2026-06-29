@@ -11,6 +11,8 @@ interface ImportLog {
   imported_by: string
   record_count: number
   skipped_count: number
+  data_date: string | null
+  file_name: string | null
 }
 
 interface DeleteLog {
@@ -238,23 +240,39 @@ export default function ShipsPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-100 text-gray-800">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">วันที่ / เวลา</th>
+                <th className="px-4 py-3 text-left font-semibold">วันที่ Upload</th>
+                <th className="px-4 py-3 text-left font-semibold">ข้อมูล ณ วันที่</th>
+                <th className="px-4 py-3 text-left font-semibold">ชื่อไฟล์</th>
                 <th className="px-4 py-3 text-left font-semibold">ผู้ Upload</th>
                 <th className="px-4 py-3 text-right font-semibold">จำนวน Record</th>
+                <th className="px-4 py-3 text-right font-semibold">ข้ามแถว (error)</th>
               </tr>
             </thead>
             <tbody>
               {importLoading ? (
-                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">กำลังโหลด…</td></tr>
               ) : importLogs.length === 0 ? (
-                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500">ยังไม่มีประวัติการ Upload</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">ยังไม่มีประวัติการ Upload</td></tr>
               ) : (
                 importLogs.map((log) => (
                   <tr key={log.id} className="border-t border-gray-200 hover:bg-gray-50">
                     <td className="px-4 py-3 text-gray-700">{fmtDate(log.imported_at)}</td>
+                    <td className="px-4 py-3 text-gray-900 font-medium">
+                      {log.data_date
+                        ? new Date(log.data_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })
+                        : <span className="text-gray-400">—</span>}
+                    </td>
+                    <td className="px-4 py-3 text-gray-700 max-w-[180px] truncate" title={log.file_name ?? ''}>
+                      {log.file_name ?? <span className="text-gray-400">—</span>}
+                    </td>
                     <td className="px-4 py-3 font-medium text-gray-900">{log.imported_by}</td>
                     <td className="px-4 py-3 text-right text-gray-900 font-semibold">
                       {log.record_count.toLocaleString('th-TH')}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {log.skipped_count > 0
+                        ? <span className="text-orange-600 font-medium">{log.skipped_count}</span>
+                        : <span className="text-gray-400">—</span>}
                     </td>
                   </tr>
                 ))
