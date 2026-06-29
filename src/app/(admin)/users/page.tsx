@@ -6,10 +6,10 @@ import type { StaffUser } from '@/types'
 interface UserFormData {
   username: string
   password: string
-  role: 'admin'
+  role: 'staff' | 'admin'
 }
 
-const EMPTY_FORM: UserFormData = { username: '', password: '', role: 'staff' }
+const EMPTY_FORM: UserFormData = { username: '', password: '', role: 'admin' }
 
 export default function UsersPage() {
   const [users, setUsers] = useState<StaffUser[]>([])
