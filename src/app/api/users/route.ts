@@ -9,7 +9,7 @@ export async function GET() {
     .select('id, username, role, is_active, created_at, created_by')
     .order('created_at', { ascending: false })
 
-  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
+  if (error) { console.error(error); return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 }) }
   return NextResponse.json({ data })
 }
 
@@ -23,11 +23,11 @@ export async function POST(request: NextRequest) {
   }
 
   if (!username || !password) {
-    return NextResponse.json({ error: 'username and password required' }, { status: 400 })
+    return NextResponse.json({ error: 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน' }, { status: 400 })
   }
 
   if (!['admin', 'staff'].includes(role)) {
-    return NextResponse.json({ error: 'role must be admin or staff' }, { status: 400 })
+    return NextResponse.json({ error: 'role ต้องเป็น admin หรือ staff เท่านั้น' }, { status: 400 })
   }
 
   const adminId = request.headers.get('x-user-id')
@@ -41,10 +41,10 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'Username already exists' }, { status: 409 })
+      return NextResponse.json({ error: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' }, { status: 409 })
     }
     console.error(error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 })
   }
 
   return NextResponse.json({ data }, { status: 201 })

@@ -15,7 +15,7 @@ export async function GET() {
 
     if (error) {
       console.error(error)
-      return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+      return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 })
     }
 
     allShips.push(...data)

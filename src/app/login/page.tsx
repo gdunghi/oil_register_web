@@ -25,7 +25,7 @@ export default function LoginPage() {
     setLoading(false)
 
     if (!res.ok) {
-      setError(json.error ?? 'Login failed')
+      setError(json.error ?? 'เข้าสู่ระบบไม่สำเร็จ')
       return
     }
 

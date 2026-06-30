@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!username || !password) {
-    return NextResponse.json({ error: 'username and password required' }, { status: 400 })
+    return NextResponse.json({ error: 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน' }, { status: 400 })
   }
 
   const { data: user, error } = await supabaseAdmin
@@ -22,16 +22,16 @@ export async function POST(request: NextRequest) {
     .single()
 
   if (error || !user) {
-    return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    return NextResponse.json({ error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' }, { status: 401 })
   }
 
   if (!user.is_active) {
-    return NextResponse.json({ error: 'Account is disabled' }, { status: 403 })
+    return NextResponse.json({ error: 'บัญชีนี้ถูกระงับการใช้งาน' }, { status: 403 })
   }
 
   const valid = await bcrypt.compare(password, user.password_hash)
   if (!valid) {
-    return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    return NextResponse.json({ error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' }, { status: 401 })
   }
 
   const token = await signJWT({ sub: user.id, username: user.username, role: user.role })

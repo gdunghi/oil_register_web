@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const { refresh_token } = body as { refresh_token?: string }
 
   if (!refresh_token) {
-    return NextResponse.json({ error: 'refresh_token required' }, { status: 400 })
+    return NextResponse.json({ error: 'ไม่พบ refresh token' }, { status: 400 })
   }
 
   const hash = hashToken(refresh_token)
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
   if (!row || row.revoked_at || new Date(row.expires_at) < new Date()) {
     return NextResponse.json(
-      { error: 'Session expired — please log in again' },
+      { error: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่' },
       { status: 401 },
     )
   }
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
   if (!user || !user.is_active) {
     return NextResponse.json(
-      { error: 'Session expired — please log in again' },
+      { error: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่' },
       { status: 401 },
     )
   }

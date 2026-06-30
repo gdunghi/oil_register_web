@@ -23,7 +23,7 @@ export async function PUT(
   if (password) updates.password_hash = await bcrypt.hash(password, 12)
 
   if (!Object.keys(updates).length) {
-    return NextResponse.json({ error: 'No fields to update' }, { status: 400 })
+    return NextResponse.json({ error: 'ไม่มีข้อมูลที่ต้องการอัปเดต' }, { status: 400 })
   }
 
   const { data, error } = await supabaseAdmin
@@ -33,7 +33,7 @@ export async function PUT(
     .select('id, username, role, is_active, created_at')
     .single()
 
-  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
+  if (error) { console.error(error); return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 }) }
   return NextResponse.json({ data })
 }
 
@@ -48,6 +48,6 @@ export async function DELETE(
     .update({ is_active: false })
     .eq('id', id)
 
-  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
+  if (error) { console.error(error); return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 }) }
   return NextResponse.json({ data: { success: true } })
 }

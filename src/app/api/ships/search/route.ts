@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get('q')?.trim()
 
   if (!q) {
-    return NextResponse.json({ error: 'query parameter q is required' }, { status: 400 })
+    return NextResponse.json({ error: 'กรุณาระบุคำค้นหา' }, { status: 400 })
   }
 
   const { data, error } = await supabaseAdmin
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     .order('ship_number', { ascending: true })
     .limit(20)
 
-  if (error) { console.error(error); return NextResponse.json({ error: 'Internal server error' }, { status: 500 }) }
+  if (error) { console.error(error); return NextResponse.json({ error: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' }, { status: 500 }) }
 
   return NextResponse.json({ data: data ?? [], total: data?.length ?? 0 })
 }

@@ -8,7 +8,7 @@ export async function GET() {
     .single()
 
   if (error || !data) {
-    return NextResponse.json({ error: 'Failed to read version' }, { status: 500 })
+    return NextResponse.json({ error: 'ไม่สามารถอ่านเวอร์ชันข้อมูลได้' }, { status: 500 })
   }
   return NextResponse.json({ last_modified_at: data.last_modified_at })
 }
