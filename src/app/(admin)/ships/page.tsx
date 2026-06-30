@@ -156,6 +156,13 @@ export default function ShipsPage() {
                 ล้างการค้นหา
               </button>
             )}
+            <a
+              href="/api/ships/export"
+              download
+              className="flex items-center gap-1 text-sm border border-gray-400 text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg transition"
+            >
+              ⬇ Export ข้อมูล
+            </a>
           </div>
 
           <p className="text-sm text-gray-600 mb-3">พบ {total.toLocaleString()} รายการ</p>
